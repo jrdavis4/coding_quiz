@@ -1,4 +1,10 @@
 .answerBtn {
-  margin: 10px auto;
+  margin-top: 10px;
+  margin-left:25%;
   display: block;
+}
+
+.question {
+  text-align: left;
+  margin-left: 25%;
 }
