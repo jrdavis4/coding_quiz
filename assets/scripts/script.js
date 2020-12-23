@@ -6,7 +6,9 @@ var modal = document.querySelector("#modal");
 var modalContent = document.querySelector("#modal-content");
 var modalBtn = document.querySelector("#highScores");
 var modalSpan = document.querySelector("#close");
+var timerEl = document.querySelector("#timer");
 var currentScore = 0;
+var secondsLeft = 60;
 var highScores = [
   {name: "Albert Einstein", score: 80, human: false},
   {name: "Sheldon Cooper", score: 90, human: false},
@@ -121,8 +123,45 @@ function clearQuiz(){
 }
 
 
-function endQuiz(){
+function answerCheck(event) {
+  if (event.target.matches("button")){
+    if (event.target.getAttribute("data-correct") === "true"){
+      currentScore += 10;
+      var randSound = Math.floor(Math.random() * correctSounds.length);
+      correctSounds[randSound].play();
+    } else {
+      var randSound = Math.floor(Math.random() * incorrectSounds.length);
+      incorrectSounds[randSound].play();
+      secondsLeft -= 5;
+      timerEl.textContent = secondsLeft;
+    }
 
+    if (queue.length === 0){
+      endQuiz();
+    } else {
+      nextQuestion();
+    }
+  }
+}
+
+
+function startQuiz() {
+  cardTextEl.style.display = "none";
+  startBtnEl.style.display = "none";
+
+  goodLuck.play();
+  goodLuck.onended = function() {
+    youllNeedIt.play();
+    youllNeedIt.onended = function() {
+      song.play();
+    }
+  }
+  setTime();
+  nextQuestion();
+}
+
+
+function endQuiz() {
   clearQuiz();
   //Get initials for high score
   var label = document.createElement("h4");
@@ -173,39 +212,23 @@ function updateHighScores() {
 }
 
 
-quizContainerEl.addEventListener("click", function(e){
-  if (e.target.matches("button")){
-    if (e.target.getAttribute("data-correct") === "true"){
-      currentScore += 10;
-      var randSound = Math.floor(Math.random() * correctSounds.length);
-      correctSounds[randSound].play();
-    } else {
-      var randSound = Math.floor(Math.random() * incorrectSounds.length);
-      incorrectSounds[randSound].play();
-    }
+function setTime() {
+  var timerInterval = setInterval(function() {
+    secondsLeft--;
+    timerEl.textContent = secondsLeft;
 
-    if (queue.length === 0){
+    if(secondsLeft === 0) {
+      clearInterval(timerInterval);
       endQuiz();
-    } else {
-      nextQuestion();
     }
-  }
-})
+  }, 1000);
+}
 
-startBtnEl.addEventListener("click", function (e) {
-  cardTextEl.style.display = "none";
-  startBtnEl.style.display = "none";
 
-  goodLuck.play();
-  goodLuck.onended = function() {
-    youllNeedIt.play();
-    youllNeedIt.onended = function() {
-      song.play();
-    }
-  }
+//Event listeners
+quizContainerEl.addEventListener("click", answerCheck)
 
-  nextQuestion();
-})
+startBtnEl.addEventListener("click", startQuiz);
 
 quizContainerEl.addEventListener("submit", submitName);
 
@@ -222,5 +245,6 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
 
 init();

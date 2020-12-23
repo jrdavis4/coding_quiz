@@ -56,3 +56,12 @@ body {
 .score {
   color: red;
 }
+
+#timer {
+  float: right;
+}
+
+#highScores {
+  float: left;
+  font-size: 15px;
+}
