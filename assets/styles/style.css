@@ -1,3 +1,11 @@
+body {
+  background-image: url(../images/background.jpg);
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .answerBtn {
   margin-top: 10px;
   margin-left:25%;
