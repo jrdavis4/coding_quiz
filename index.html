@@ -15,23 +15,29 @@
 
 <body>
   
-  <div class="container col-8 mt-5">
+  <main class="container col-8 mt-5">
     <div class="card text-center bg-dark text-light">
-      <div class="card-header h3 bg-secondary">
+      <header class="card-header h3 bg-secondary">
+        <button id="highScores">High Scores</button>
         Coding Bootcamp Quiz
-      </div>
-      <div class="card-body">
+      </header>
+      <section class="card-body">
         <h5 class="card-title"></h5>
         <div class="quiz-container">
           <p class="card-text">This is a simple multiple choice coding quiz. Click BEGIN to get started!</p>
         </div>
         <a href="#" class="btn btn-primary mt-3 startBtn">Begin!</a>
+      </section>
+      <div id="modal">
+        <div id="modal-content">
+          <span id="close">&times;</span>
+        </div>
       </div>
-      <div class="card-footer bg-secondary">
+      <footer class="card-footer bg-secondary">
         Previous high score: <span class="prev-high"><b>None</b></span>
-      </div>
+      </footer>
     </div>
-  </div>
+  </main>
 
 
 </body>

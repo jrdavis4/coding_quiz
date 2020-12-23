@@ -2,11 +2,18 @@
 var startBtnEl = document.querySelector(".startBtn");
 var quizContainerEl = document.querySelector(".quiz-container");
 var cardTextEl = document.querySelector(".card-text");
+var modal = document.querySelector("#modal");
+var modalContent = document.querySelector("#modal-content");
+var modalBtn = document.querySelector("#highScores");
+var modalSpan = document.querySelector("#close");
 var currentScore = 0;
 var highScores = [
-  {name: "Justin", score: 80},
-  {name: "Adam", score: 90},
-  {name: "Ashley", score: 85}
+  {name: "Albert Einstein", score: 80, human: false},
+  {name: "Sheldon Cooper", score: 90, human: false},
+  {name: "Chuck Norris", score: 85, human: false},
+  {name: "A Chicken", score: 15, human: false},
+  {name: "Arianna Grande", score: 60, human: false},
+  {name: "Alper", score: 83, human: false}
 ]
 
 var questionList = [
@@ -21,11 +28,44 @@ var questionList = [
   }
 ]
 
-//Create list of index numbers to pull from randomly (later) 
+//Create list of index numbers to pull from randomly 
 var queue = [];
 for (var i = 0; i < questionList.length; i++){
   queue.push(i);
 }
+
+//Create audio elements
+var song = document.createElement("audio");
+song.setAttribute("src", "assets/audio/finalCountdown.mp3");
+song.volume = .1;
+
+var goodLuck = document.createElement("audio");
+goodLuck.setAttribute("src", "assets/audio/goodLuck.mp3")
+goodLuck.volume = .3;
+
+var youllNeedIt = document.createElement("audio");
+youllNeedIt.setAttribute("src", "assets/audio/youllNeedIt.mp3");
+youllNeedIt.volume = .3;
+
+var woo = document.createElement("audio");
+woo.setAttribute("src", "assets/audio/woo.mp3");
+woo.volume = .3;
+
+var yeah = document.createElement("audio");
+yeah.setAttribute("src", "assets/audio/yeah.mp3");
+yeah.volume = .3;
+
+var uggh = document.createElement("audio");
+uggh.setAttribute("src", "assets/audio/uggh.mp3");
+uggh.volume = .3;
+
+var umm = document.createElement("audio");
+umm.setAttribute("src", "assets/audio/umm.mp3");
+umm.volume = .3;
+
+var correctSounds = [woo, yeah];
+var incorrectSounds = [uggh, umm];
+
 
 function init(){
 
@@ -35,8 +75,9 @@ function init(){
   } else {
     highScores = JSON.parse(localStorage.getItem("highScores"));
   }
-
+  updateHighScores();
 }
+
 
 function nextQuestion(){
 
@@ -73,7 +114,6 @@ function nextQuestion(){
 
 
 function clearQuiz(){
-
   //Clear quiz area
   while (quizContainerEl.firstChild){
     quizContainerEl.removeChild(quizContainerEl.firstChild);
@@ -83,26 +123,65 @@ function clearQuiz(){
 
 function endQuiz(){
 
+  clearQuiz();
   //Get initials for high score
-  var x = "test"
+  var label = document.createElement("h4");
+  label.textContent = "Enter your name:";
+  quizContainerEl.appendChild(label);
+
+  var form = document.createElement("form");
+  quizContainerEl.appendChild(form);
+
+  var input = document.createElement("input");
+  input.setAttribute("type", "text");
+  input.setAttribute("id", "name");
+  form.appendChild(input);
+}
+
+
+function submitName (event){
+  event.preventDefault();
+  var name = document.querySelector("#name").value;
 
   //Insert into the highScores array, sort based on score, and remove the lowest
-  highScores.push({name: x, score: currentScore});
+  highScores.push({name: name, score: currentScore, human: true});
   highScores.sort(function(a,b){
     return (b.score - a.score);
   })
   highScores.splice(highScores.length - 1, 1);
 
+  updateHighScores();
+  
+}
+
+
+function updateHighScores() {
+  //Clear current scores by removing all elements except the first (close button)
+  while (modalContent.children[1]){
+    modalContent.removeChild(modalContent.children[1]);
+  }
+
+  //Update scores in modal
+  highScores.forEach(function(item, i) {
+    var p = document.createElement("p")
+    p.innerHTML = (i + 1) + ".   " + item.name + "<span class='score'>" + "   " + item.score + "</span>";
+    modalContent.appendChild(p);
+  })
+
   //Store highScores into local storage
   localStorage.setItem("highScores", JSON.stringify(highScores));
-
 }
 
 
 quizContainerEl.addEventListener("click", function(e){
   if (e.target.matches("button")){
     if (e.target.getAttribute("data-correct") === "true"){
-      currentScore += 100;
+      currentScore += 10;
+      var randSound = Math.floor(Math.random() * correctSounds.length);
+      correctSounds[randSound].play();
+    } else {
+      var randSound = Math.floor(Math.random() * incorrectSounds.length);
+      incorrectSounds[randSound].play();
     }
 
     if (queue.length === 0){
@@ -116,6 +195,32 @@ quizContainerEl.addEventListener("click", function(e){
 startBtnEl.addEventListener("click", function (e) {
   cardTextEl.style.display = "none";
   startBtnEl.style.display = "none";
-  init();
+
+  goodLuck.play();
+  goodLuck.onended = function() {
+    youllNeedIt.play();
+    youllNeedIt.onended = function() {
+      song.play();
+    }
+  }
+
   nextQuestion();
 })
+
+quizContainerEl.addEventListener("submit", submitName);
+
+modalBtn.onclick = function() {
+  modal.style.display = "block";
+}
+
+modalSpan.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+init();
