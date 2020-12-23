@@ -9,7 +9,7 @@ var modalSpan = document.querySelector("#close");
 var timerEl = document.querySelector("#timer");
 var end = false;
 var currentScore = 0;
-var secondsLeft = 20;
+var secondsLeft = 60;
 var highScores = [
   {name: "Albert Einstein", score: 80, human: false},
   {name: "Sheldon Cooper", score: 90, human: false},
@@ -28,7 +28,34 @@ var questionList = [
     question: "This is question number 2?",
     answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
     correctIndex: 3
-  }
+  },
+  {
+    question: "Which character is used for variable assignment?",
+    answers: ["===","=","<>","=="],
+    correctIndex: 1
+  },{
+    question: "This is question number 2?",
+    answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
+    correctIndex: 3
+  },
+  {
+    question: "Which character is used for variable assignment?",
+    answers: ["===","=","<>","=="],
+    correctIndex: 1
+  },{
+    question: "This is question number 2?",
+    answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
+    correctIndex: 3
+  },
+  {
+    question: "Which character is used for variable assignment?",
+    answers: ["===","=","<>","=="],
+    correctIndex: 1
+  },{
+    question: "This is question number 2?",
+    answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
+    correctIndex: 3
+  },
 ]
 
 //Create list of index numbers to pull from randomly 
@@ -151,12 +178,12 @@ function answerCheck(event) {
         secondsLeft -= 5;
       }
       timerEl.textContent = secondsLeft;
+      flickerTimer();
     }
 
     if (queue.length === 0){
       end = true;
     }
-
     if (!end) {
       nextQuestion();
     }
@@ -166,6 +193,12 @@ function answerCheck(event) {
   }
 }
 
+function flickerTimer() {
+  timerEl.style.backgroundColor = "red";
+  setTimeout(function() {
+    timerEl.style.backgroundColor = "";
+  }, 250)
+}
 
 function startQuiz() {
   cardTextEl.style.display = "none";
