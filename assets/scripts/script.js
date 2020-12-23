@@ -7,8 +7,9 @@ var modalContent = document.querySelector("#modal-content");
 var modalBtn = document.querySelector("#highScores");
 var modalSpan = document.querySelector("#close");
 var timerEl = document.querySelector("#timer");
+var end = false;
 var currentScore = 0;
-var secondsLeft = 60;
+var secondsLeft = 20;
 var highScores = [
   {name: "Albert Einstein", score: 80, human: false},
   {name: "Sheldon Cooper", score: 90, human: false},
@@ -48,6 +49,14 @@ goodLuck.volume = .3;
 var youllNeedIt = document.createElement("audio");
 youllNeedIt.setAttribute("src", "assets/audio/youllNeedIt.mp3");
 youllNeedIt.volume = .3;
+
+var tenSeconds = document.createElement("audio");
+tenSeconds.setAttribute("src", "assets/audio/tenSeconds.mp3");
+tenSeconds.volume = .3;
+
+var totalCarnage = document.createElement("audio");
+totalCarnage.setAttribute("src", "assets/audio/totalCarnage.mp3");
+totalCarnage.volume = .3;
 
 var woo = document.createElement("audio");
 woo.setAttribute("src", "assets/audio/woo.mp3");
@@ -125,21 +134,34 @@ function clearQuiz(){
 
 function answerCheck(event) {
   if (event.target.matches("button")){
+
+    //If correct answer chosen
     if (event.target.getAttribute("data-correct") === "true"){
       currentScore += 10;
       var randSound = Math.floor(Math.random() * correctSounds.length);
       correctSounds[randSound].play();
+      // if incorrect answer chosen
     } else {
       var randSound = Math.floor(Math.random() * incorrectSounds.length);
       incorrectSounds[randSound].play();
-      secondsLeft -= 5;
+      if (secondsLeft <= 5) {
+        secondsLeft = 0;
+        end = true;
+      } else {
+        secondsLeft -= 5;
+      }
       timerEl.textContent = secondsLeft;
     }
 
     if (queue.length === 0){
-      endQuiz();
-    } else {
+      end = true;
+    }
+
+    if (!end) {
       nextQuestion();
+    }
+    if (end) {
+      endQuiz();
     }
   }
 }
@@ -162,7 +184,19 @@ function startQuiz() {
 
 
 function endQuiz() {
+  //Bonus points for time remaining
+  currentScore += secondsLeft;
+  
+  //Stop the timer
+  secondsLeft = 0;
+  timerEl.textContent = secondsLeft;
+
+  //Stop song
+  song.pause();
+  totalCarnage.play();
+
   clearQuiz();
+
   //Get initials for high score
   var label = document.createElement("h4");
   label.textContent = "Enter your name:";
@@ -213,13 +247,25 @@ function updateHighScores() {
 
 
 function setTime() {
+  var warning = false;
   var timerInterval = setInterval(function() {
-    secondsLeft--;
-    timerEl.textContent = secondsLeft;
 
-    if(secondsLeft === 0) {
+    if (end) {
       clearInterval(timerInterval);
-      endQuiz();
+    } else {
+      secondsLeft--;
+      timerEl.textContent = secondsLeft;
+
+      if (secondsLeft <= 10 && !warning) {
+        tenSeconds.play();
+        warning = true;
+      }
+      if (secondsLeft <= 0) {
+        secondsLeft = 0;
+        timerEl.textContent = secondsLeft;
+        clearInterval(timerInterval);
+        endQuiz();
+      }
     }
   }, 1000);
 }
