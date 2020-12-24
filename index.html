@@ -43,11 +43,27 @@
       </section>
       <div id="modal">
         <div id="modal-content">
-          <span id="close">&times;</span>
+          <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10" id="high-score-header">High Scores</div>
+            <div class="col-1">
+              <span id="close">&times;</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12" id="high-score-list"></div>
+          </div>
+          <div class="row">
+            <div class="col-12" id="high-score-footer">
+              <button>Reset All</button>
+            </div>
+          </div>
+          
         </div>
       </div>
       <footer id="card-footer" class="card-footer bg-secondary">
-        Previous high score: <span class="prev-high"><b>None</b></span>
+        <div id="current-score-container">Score: <span id="current-score"><b></b></span></div>
+        <div id="result-notification"></div>
       </footer>
     </div>
   </main>

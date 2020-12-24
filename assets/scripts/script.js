@@ -5,11 +5,15 @@ var questionContainerEl = document.querySelector("#question-container");
 var answerContainerEl = document.querySelector("#answer-container");
 var cardTextEl = document.querySelector(".card-text");
 var modal = document.querySelector("#modal");
-var modalContent = document.querySelector("#modal-content");
+// var modalContent = document.querySelector("#modal-content");
 var startContainerEl = document.querySelector(".start-container");
 var modalBtn = document.querySelector("#highScores");
 var modalSpan = document.querySelector("#close");
 var timerEl = document.querySelector("#timer");
+var resultNotificationEl = document.querySelector("#result-notification");
+var currentScoreContainerEl = document.querySelector("#current-score-container");
+var currentScoreSpan = document.querySelector("#current-score");
+var highScoreListEl = document.querySelector("#high-score-list");
 var end = false;
 var currentScore = 0;
 var secondsLeft = 60;
@@ -28,7 +32,7 @@ var questionList = [
     answers: ["===","=","<>","=="],
     correctIndex: 1
   },{
-    question: "Inside which HTML element do we put the JavaScript?",
+    question: "Inside which HTML element do we link the Javascript file?",
     answers: ["<script>","<link>","<js>","<javascript>"],
     correctIndex: 0
   },{
@@ -56,32 +60,32 @@ var questionList = [
     answers: ["my", "current", "this", "now"],
     correctIndex: 2
   },{
-    question: "Which character is used for variable assignment?",
-    answers: ["===","=","<>","=="],
+    question: "Javascript is primarily a markup language used to style web elements.",
+    answers: ["True", "False"],
     correctIndex: 1
   },{
-    question: "This is question number 2?",
-    answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
+    question: "A variable defined within a function has a _____ scope.",
+    answers: ["Global", "Linear", "Complex", "Local"],
     correctIndex: 3
   },{
-    question: "Which character is used for variable assignment?",
-    answers: ["===","=","<>","=="],
-    correctIndex: 1
+    question: "Javascript has the ability to convert data types automatically when needed. This is known as type _____.",
+    answers: ["Coersion","Conversion","Convincing","Changing"],
+    correctIndex: 0
   },{
-    question: "This is question number 2?",
-    answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
+    question: "What is the difference between == and === in Javascript?",
+    answers: ["=== is not valid", "== ignores capitalization", "=== ignores null and NaN values", "== disregards data type"],
     correctIndex: 3
   },{
-    question: "Which character is used for variable assignment?",
-    answers: ["===","=","<>","=="],
-    correctIndex: 1
+    question: "HTML stands for Hypertext _____ language.",
+    answers: ["Mirroring", "Minimized", "Markup", "Multipurpose"],
+    correctIndex: 2
   },{
-    question: "This is question number 2?",
-    answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
-    correctIndex: 3
+    question: "If an event listener is triggered within a child div, the parent div handler occurs as well. This is known as event _____.",
+    answers: ["Recursion", "Repeating", "Bubbling", "Delegation"],
+    correctIndex: 2
   },{
-    question: "Which character is used for variable assignment?",
-    answers: ["===","=","<>","=="],
+    question: "Which of the following is NOT a data type in Javascript?",
+    answers: ["Number", "Int", "String", "Object"],
     correctIndex: 1
   }
 ]
@@ -198,6 +202,7 @@ function answerCheck(event) {
       currentScore += 10;
       var randSound = Math.floor(Math.random() * correctSounds.length);
       correctSounds[randSound].play();
+      resultNotification(true);
       // if incorrect answer chosen
     } else {
       var randSound = Math.floor(Math.random() * incorrectSounds.length);
@@ -210,6 +215,8 @@ function answerCheck(event) {
       }
       timerEl.textContent = secondsLeft;
       flickerTimer();
+
+      resultNotification(false);
     }
 
     if (queue.length === 0){
@@ -229,6 +236,24 @@ function flickerTimer() {
   setTimeout(function() {
     timerEl.style.backgroundColor = "";
   }, 250)
+}
+
+function resultNotification(result) {
+  currentScoreContainerEl.style.display = "none";
+  resultNotificationEl.style.display = "block";
+
+  if (result) {
+    resultNotificationEl.textContent = "CORRECT!";
+    resultNotificationEl.setAttribute("class", "correct");
+  } else {
+    resultNotificationEl.textContent = "WRONG!"
+    resultNotificationEl.setAttribute("class", "wrong");
+  }
+  setTimeout(function() {
+    timerEl.style.backgroundColor = "";
+    currentScoreContainerEl.style.display = "block";
+    resultNotificationEl.style.display = "none";
+  }, 1000)
 }
 
 function startQuiz() {
@@ -268,6 +293,7 @@ function endQuiz() {
   var label = document.createElement("h4");
   label.textContent = "Enter your name:";
   questionContainerEl.appendChild(label);
+  
 
   var form = document.createElement("form");
   questionContainerEl.appendChild(form);
@@ -275,6 +301,7 @@ function endQuiz() {
   var input = document.createElement("input");
   input.setAttribute("type", "text");
   input.setAttribute("id", "name");
+  input.setAttribute("autofocus", true);
   form.appendChild(input);
 }
 
@@ -296,16 +323,17 @@ function submitName (event){
 
 
 function updateHighScores() {
-  //Clear current scores by removing all elements except the first (close button)
-  while (modalContent.children[1]){
-    modalContent.removeChild(modalContent.children[1]);
+  //Clear current scores by removing all elements
+  while (highScoreListEl.children[0]){
+    highScoreListEl.removeChild(highScoreListEl.children[0]);
   }
 
   //Update scores in modal
   highScores.forEach(function(item, i) {
     var p = document.createElement("p")
+    p.setAttribute("class", "high-score-name");
     p.innerHTML = (i + 1) + ".   " + item.name + "<span class='score'>" + "   " + item.score + "</span>";
-    modalContent.appendChild(p);
+    highScoreListEl.appendChild(p);
   })
 
   //Store highScores into local storage
@@ -319,9 +347,11 @@ function setTime() {
 
     if (end) {
       clearInterval(timerInterval);
+      currentScoreSpan.textContent = currentScore;
     } else {
       secondsLeft--;
       timerEl.textContent = secondsLeft;
+      currentScoreSpan.textContent = currentScore + secondsLeft;
 
       if (secondsLeft <= 10 && !warning) {
         tenSeconds.play();
