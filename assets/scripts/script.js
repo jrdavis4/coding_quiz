@@ -180,6 +180,9 @@ function nextQuestion(){
     answerContainerEl.appendChild(answerEl);
 
   }
+  //Display current score at bottom
+  currentScoreSpan.textContent = "Score: " + currentScore;
+
 }
 
 
@@ -218,7 +221,7 @@ function answerCheck(event) {
 
       resultNotification(false);
     }
-
+    
     if (queue.length === 0){
       end = true;
     }
@@ -278,6 +281,9 @@ function startQuiz() {
 function endQuiz() {
   //Bonus points for time remaining
   currentScore += secondsLeft;
+
+  //Display current score at bottom
+  currentScoreSpan.textContent = "Score: " + currentScore;
   
   //Stop the timer
   secondsLeft = 0;
@@ -347,11 +353,9 @@ function setTime() {
 
     if (end) {
       clearInterval(timerInterval);
-      currentScoreSpan.textContent = currentScore;
     } else {
       secondsLeft--;
       timerEl.textContent = secondsLeft;
-      currentScoreSpan.textContent = currentScore + secondsLeft;
 
       if (secondsLeft <= 10 && !warning) {
         tenSeconds.play();
