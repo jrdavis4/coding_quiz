@@ -1,9 +1,12 @@
 //Assignments
 var startBtnEl = document.querySelector(".startBtn");
-var quizContainerEl = document.querySelector(".quiz-container");
+// var quizContainerEl = document.querySelector(".quiz-container");
+var questionContainerEl = document.querySelector("#question-container");
+var answerContainerEl = document.querySelector("#answer-container");
 var cardTextEl = document.querySelector(".card-text");
 var modal = document.querySelector("#modal");
 var modalContent = document.querySelector("#modal-content");
+var startContainerEl = document.querySelector(".start-container");
 var modalBtn = document.querySelector("#highScores");
 var modalSpan = document.querySelector("#close");
 var timerEl = document.querySelector("#timer");
@@ -25,11 +28,34 @@ var questionList = [
     answers: ["===","=","<>","=="],
     correctIndex: 1
   },{
-    question: "This is question number 2?",
-    answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
+    question: "Inside which HTML element do we put the JavaScript?",
+    answers: ["<script>","<link>","<js>","<javascript>"],
+    correctIndex: 0
+  },{
+    question: "Javascript is the successor to Java",
+    answers: ["True", "False"],
+    correctIndex: 1
+  },{
+    question: "Which of the following is NOT a Javascript framework?",
+    answers: ["Angular","React","jQuery","Bootstrap"],
     correctIndex: 3
-  },
-  {
+  },{
+    question: "Which function is used to remove specific elements from an array?",
+    answers: ["cut()", "delete()", "splice()", "take()"],
+    correctIndex: 2
+  },{
+    question: "Javascript variable names are case sensitive.",
+    answers: ["True", "False"],
+    correctIndex: 0
+  },{
+    question: "Javascript must be compiled into machine code before running.",
+    answers: ["True", "False"],
+    correctIndex: 1
+  },{
+    question: "_____ is the keyword used to reference the current object.",
+    answers: ["my", "current", "this", "now"],
+    correctIndex: 2
+  },{
     question: "Which character is used for variable assignment?",
     answers: ["===","=","<>","=="],
     correctIndex: 1
@@ -37,8 +63,7 @@ var questionList = [
     question: "This is question number 2?",
     answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
     correctIndex: 3
-  },
-  {
+  },{
     question: "Which character is used for variable assignment?",
     answers: ["===","=","<>","=="],
     correctIndex: 1
@@ -46,8 +71,7 @@ var questionList = [
     question: "This is question number 2?",
     answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
     correctIndex: 3
-  },
-  {
+  },{
     question: "Which character is used for variable assignment?",
     answers: ["===","=","<>","=="],
     correctIndex: 1
@@ -55,7 +79,11 @@ var questionList = [
     question: "This is question number 2?",
     answers: ["Answer 1","Answer 2","Answer 3","Answer 4","Answer 5"],
     correctIndex: 3
-  },
+  },{
+    question: "Which character is used for variable assignment?",
+    answers: ["===","=","<>","=="],
+    correctIndex: 1
+  }
 ]
 
 //Create list of index numbers to pull from randomly 
@@ -130,7 +158,7 @@ function nextQuestion(){
   var questionEl = document.createElement("h4");
   questionEl.setAttribute("class", "question");
   questionEl.innerHTML = questionList[randIndex].question;
-  quizContainerEl.appendChild(questionEl);
+  questionContainerEl.appendChild(questionEl);
 
   //Loop through all answers to create and append
   for (var i = 0; i < questionList[randIndex].answers.length; i++){
@@ -144,8 +172,8 @@ function nextQuestion(){
       answerEl.setAttribute("data-correct", false);
     }
 
-    answerEl.innerHTML = questionList[randIndex].answers[i];
-    quizContainerEl.appendChild(answerEl);
+    answerEl.textContent = questionList[randIndex].answers[i];
+    answerContainerEl.appendChild(answerEl);
 
   }
 }
@@ -153,8 +181,11 @@ function nextQuestion(){
 
 function clearQuiz(){
   //Clear quiz area
-  while (quizContainerEl.firstChild){
-    quizContainerEl.removeChild(quizContainerEl.firstChild);
+  while (questionContainerEl.lastElementChild){
+    questionContainerEl.removeChild(questionContainerEl.lastElementChild);
+  }
+  while (answerContainerEl.lastElementChild){
+    answerContainerEl.removeChild(answerContainerEl.lastElementChild);
   }
 }
 
@@ -201,8 +232,11 @@ function flickerTimer() {
 }
 
 function startQuiz() {
-  cardTextEl.style.display = "none";
-  startBtnEl.style.display = "none";
+
+  startContainerEl.style.display = "none";
+  clearQuiz();
+  // cardTextEl.style.display = "none";
+  // startBtnEl.style.display = "none";
 
   goodLuck.play();
   goodLuck.onended = function() {
@@ -233,10 +267,10 @@ function endQuiz() {
   //Get initials for high score
   var label = document.createElement("h4");
   label.textContent = "Enter your name:";
-  quizContainerEl.appendChild(label);
+  questionContainerEl.appendChild(label);
 
   var form = document.createElement("form");
-  quizContainerEl.appendChild(form);
+  questionContainerEl.appendChild(form);
 
   var input = document.createElement("input");
   input.setAttribute("type", "text");
@@ -305,11 +339,11 @@ function setTime() {
 
 
 //Event listeners
-quizContainerEl.addEventListener("click", answerCheck)
+answerContainerEl.addEventListener("click", answerCheck)
 
 startBtnEl.addEventListener("click", startQuiz);
 
-quizContainerEl.addEventListener("submit", submitName);
+questionContainerEl.addEventListener("submit", submitName);
 
 modalBtn.onclick = function() {
   modal.style.display = "block";

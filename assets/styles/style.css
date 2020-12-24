@@ -1,3 +1,7 @@
+* {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 body {
   background-image: url(../images/background.jpg);
   background-size: cover;
@@ -6,16 +10,29 @@ body {
   background-attachment: fixed;
 }
 
+/* #card-header, #card-footer {
+  color: #62C6F2;
+  font-size: 30px;
+  font-weight: bold;
+} */
+
 .answerBtn {
-  margin-top: 10px;
-  margin-left:25%;
+  margin: 10px auto 0px auto;
   display: block;
 }
 
-.question {
+/* .question {
   text-align: left;
   margin-left: 25%;
+} */
+
+/* #question-container {
+
 }
+
+#answer-container {
+  background-color: red;
+} */
 
 #modal {
   display: none;
@@ -58,10 +75,26 @@ body {
 }
 
 #timer {
-  float: right;
+  /* float: right; */
+  font-weight: bolder;
+  color: white;
 }
 
 #highScores {
-  float: left;
-  font-size: 15px;
+  /* float: left; */
+  font-size: 16px;
+  background-color:#0275d8;
+  color: white;
+  /* z-index: 100; */
+  /* font-weight: bold; */
+}
+
+#title {
+  /* position: absolute; */
+  /* left: 0; */
+  /* right: 0; */
+  /* display: inline; */
+  /* background-color: red; */
+  /* z-index: 0; */
+  /* text-align: center; */
 }

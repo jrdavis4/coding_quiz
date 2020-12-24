@@ -17,24 +17,36 @@
   
   <main class="container col-10 mt-5">
     <div class="card text-center bg-dark text-light">
-      <header class="card-header h3 bg-secondary">
-        <button id="highScores">High Scores</button>
-        Coding Bootcamp Quiz
-        <span id="timer">60</span>
+      <header id="card-header" class="card-header h3 bg-secondary">
+        <div class="row">
+          <div class="col-sm-3">
+            <button id="highScores" class="align-middle">High Scores</button>
+          </div>
+          <div class="col-sm-6">
+            <div id="title" class="align-middle">Coding Bootcamp Quiz</div>
+          </div>
+          <div class="col-sm-3">
+            <span id="timer" class="align-middle">60</span>
+          </div>
+        </div>
       </header>
       <section class="card-body">
         <h5 class="card-title"></h5>
-        <div class="quiz-container">
-          <p class="card-text">This is a simple multiple choice coding quiz. Click BEGIN to get started!</p>
+        <div class="start-container">
+          <p class="card-text">This is a fast-paced, multiple choice coding quiz. The quicker you finish, the more points you receive. Click BEGIN to get started!</p>
+          <a href="#" class="btn btn-primary mt-3 startBtn">Begin!</a>
         </div>
-        <a href="#" class="btn btn-primary mt-3 startBtn">Begin!</a>
+        <div class="quiz-container">
+          <div id="question-container"></div>
+          <div id="answer-container"></div>
+        </div>
       </section>
       <div id="modal">
         <div id="modal-content">
           <span id="close">&times;</span>
         </div>
       </div>
-      <footer class="card-footer bg-secondary">
+      <footer id="card-footer" class="card-footer bg-secondary">
         Previous high score: <span class="prev-high"><b>None</b></span>
       </footer>
     </div>
