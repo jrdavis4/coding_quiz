@@ -1,29 +1,28 @@
 //Assignments
 var startBtnEl = document.querySelector(".startBtn");
-// var quizContainerEl = document.querySelector(".quiz-container");
 var questionContainerEl = document.querySelector("#question-container");
 var answerContainerEl = document.querySelector("#answer-container");
 var cardTextEl = document.querySelector(".card-text");
-var modal = document.querySelector("#modal");
-// var modalContent = document.querySelector("#modal-content");
+var modal = document.querySelector(".modal");
+var modalContentEl = document.querySelector(".modal-content");
 var startContainerEl = document.querySelector(".start-container");
 var modalBtn = document.querySelector("#highScores");
-var modalSpan = document.querySelector("#close");
+var modalSpan = document.querySelector(".close");
 var timerEl = document.querySelector("#timer");
 var resultNotificationEl = document.querySelector("#result-notification");
 var currentScoreContainerEl = document.querySelector("#current-score-container");
 var currentScoreSpan = document.querySelector("#current-score");
-var highScoreListEl = document.querySelector("#high-score-list");
+var highScoreListEl = document.querySelector(".high-score-list");
 var end = false;
 var currentScore = 0;
 var secondsLeft = 60;
 var highScores = [
-  {name: "Albert Einstein", score: 80, human: false},
-  {name: "Sheldon Cooper", score: 90, human: false},
-  {name: "Chuck Norris", score: 85, human: false},
-  {name: "A Chicken", score: 15, human: false},
-  {name: "Arianna Grande", score: 60, human: false},
-  {name: "Alper", score: 83, human: false}
+  {name: "Chuck Norris", score: 175, you: false},
+  {name: "Sheldon Cooper", score: 156, you: false},
+  {name: "Albert Einstein", score: 150, you: false},
+  {name: "Taylor Swift", score: 120, you: false},
+  {name: "A Chicken", score: 57, you: false},
+  {name: "Bob", score: 45, you: false},
 ]
 
 var questionList = [
@@ -138,17 +137,44 @@ var incorrectSounds = [uggh, umm];
 
 
 function init(){
+  //Load saved scored if any
+  if (localStorage.getItem("highScores")){
+      highScores = JSON.parse(localStorage.getItem("highScores"));
+    }
 
-  if (!localStorage.getItem("highScores")){
-    console.log("yes");
-    return;
-  } else {
-    highScores = JSON.parse(localStorage.getItem("highScores"));
-  }
   updateHighScores();
+
+  timerEl.textContent = secondsLeft;
+
+  //Show previous high score
+  var record = "None";
+  highScores.forEach(function(item) {
+    if (item.you === true) {
+      record = item.score;
+    }
+  })
+  currentScoreSpan.textContent = "Your personal best: " + record;
 }
 
+function replay(event) {
 
+  if (event.target.matches("button")) {
+    //Reset queue
+    for (var i = 0; i < questionList.length; i++){
+      queue.push(i);
+    }
+
+    //Reset variables
+    currentScore = 0;
+    secondsLeft = 60;
+    end = false;
+
+    clearQuiz();
+    startContainerEl.style.display = "block";
+    init();
+    
+  }
+}
 function nextQuestion(){
 
   clearQuiz();
@@ -238,7 +264,7 @@ function flickerTimer() {
   timerEl.style.backgroundColor = "red";
   setTimeout(function() {
     timerEl.style.backgroundColor = "";
-  }, 250)
+  }, 500)
 }
 
 function resultNotification(result) {
@@ -295,6 +321,11 @@ function endQuiz() {
 
   clearQuiz();
 
+  //Show score
+  var score = document.createElement("h1");
+  score.textContent = "Final Score: " + currentScore;
+  questionContainerEl.appendChild(score);
+
   //Get initials for high score
   var label = document.createElement("h4");
   label.textContent = "Enter your name:";
@@ -309,21 +340,69 @@ function endQuiz() {
   input.setAttribute("id", "name");
   input.setAttribute("autofocus", true);
   form.appendChild(input);
+
+  currentScoreSpan.textContent = "";
 }
 
 
 function submitName (event){
   event.preventDefault();
   var name = document.querySelector("#name").value;
+  var skip = false;
 
-  //Insert into the highScores array, sort based on score, and remove the lowest
-  highScores.push({name: name, score: currentScore, human: true});
-  highScores.sort(function(a,b){
-    return (b.score - a.score);
+  //Update score and resort if same name AND better score. Do nothing if lower score
+  highScores.forEach(function(item) {
+    if (item.name === name && currentScore > item.score) {
+      item.score = currentScore;
+      highScores.sort(function(a,b){
+        return (b.score - a.score);
+      })
+      skip = true;
+    } else if (item.name === name && currentScore <= item.score) {
+      skip = true;
+    }
   })
-  highScores.splice(highScores.length - 1, 1);
 
+  if (!skip) {
+    //Set each you property to false to ensure only one "you" exists after push
+    highScores.forEach(function(item) {
+      item.you = false;
+    })
+
+    //Push results into the highScores array, sort based on score, and remove the lowest
+    highScores.push({name: name, score: currentScore, you: true});
+    highScores.sort(function(a,b){
+      return (b.score - a.score);
+    })
+    highScores.splice(highScores.length - 1, 1)
+  }
+  
   updateHighScores();
+  clearQuiz();
+
+  //Display scores and replay button
+  highScores.forEach(function(item, i) {
+    var p = document.createElement("p")
+    p.setAttribute("class", "high-score-name");
+    p.style.borderBottom = "1px solid white";
+    //Highligh player score in list
+    if (item.you) {
+      p.setAttribute("class", "you high-score-name");
+    }
+    p.innerHTML = (i + 1) + ". " + item.name + ": " + "<span class='score'>" + item.score + "</span>";
+
+    if (this.you) {
+      p.style.backgroundColor = "white";
+    }
+    questionContainerEl.appendChild(p);
+  })
+
+  var replay = document.createElement("button");
+  replay.setAttribute("class", "btn btn-primary border");
+  replay.setAttribute("id", "play-again");
+  replay.textContent = "Play Again";
+  questionContainerEl.appendChild(replay);
+
   
 }
 
@@ -333,12 +412,16 @@ function updateHighScores() {
   while (highScoreListEl.children[0]){
     highScoreListEl.removeChild(highScoreListEl.children[0]);
   }
-
   //Update scores in modal
   highScores.forEach(function(item, i) {
     var p = document.createElement("p")
     p.setAttribute("class", "high-score-name");
-    p.innerHTML = (i + 1) + ".   " + item.name + "<span class='score'>" + "   " + item.score + "</span>";
+    p.style.borderBottom = "1px solid white";
+    //Highligh player score in list
+    if (item.you) {
+      p.setAttribute("class", "you high-score-name");
+    }
+    p.innerHTML = (i + 1) + ". " + item.name + ": " + "<span class='score'>" + item.score + "</span>";
     highScoreListEl.appendChild(p);
   })
 
@@ -371,6 +454,24 @@ function setTime() {
   }, 1000);
 }
 
+function resetScores(event) {
+  if (event.target.getAttribute("id") === "reset") {
+
+    highScores = [
+      {name: "Chuck Norris", score: 175, you: false},
+      {name: "Sheldon Cooper", score: 156, you: false},
+      {name: "Albert Einstein", score: 150, you: false},
+      {name: "Taylor Swift", score: 120, you: false},
+      {name: "A Chicken", score: 57, you: false},
+      {name: "Bob", score: 45, you: false},
+    ]
+  
+    currentScoreSpan.textContent = "Your personal best: None";
+  
+    updateHighScores();
+  }
+}
+
 
 //Event listeners
 answerContainerEl.addEventListener("click", answerCheck)
@@ -378,6 +479,12 @@ answerContainerEl.addEventListener("click", answerCheck)
 startBtnEl.addEventListener("click", startQuiz);
 
 questionContainerEl.addEventListener("submit", submitName);
+
+questionContainerEl.addEventListener("click", replay);
+
+modal.addEventListener("click", resetScores);
+
+
 
 modalBtn.onclick = function() {
   modal.style.display = "block";

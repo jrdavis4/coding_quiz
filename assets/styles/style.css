@@ -12,8 +12,13 @@ body {
 
 #title {
   font-weight: bold;
+  margin-top: 5px;
 }
 
+#intro {
+  width: 60%;
+  margin: auto;
+}
 .answerBtn {
   margin: 10px auto 0px auto;
   display: block;
@@ -21,8 +26,11 @@ body {
   color: white;
 }
 
+#play-again {
+  margin: 25px;
+}
 
-#modal {
+.modal {
   display: none;
   position: fixed;
   z-index: 1;
@@ -35,30 +43,32 @@ body {
   background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
 }
 
-#modal-content {
+.modal-content {
   background-color: #212529;
-  margin: auto;
-  /* padding: 15px; */
-  border: 1px solid white;
-  width: 80%;
   color: white;
+  width: 80%;
+  margin: auto;
 }
 
-#close {
+#reset {
+  margin-top: 15px;
+}
+
+.close {
   color: #aaaaaa;
   font-size: 30px;
   font-weight: bold;
 }
 
-#close:hover,
-#close:focus {
+.close:hover,
+.close:focus {
   color: white;
   text-decoration: none;
   cursor: pointer;
 }
 
 .score {
-  color: green;
+  color: rgb(0, 189, 0);
   font-size: 20px;
   font-weight: bold;
 }
@@ -66,6 +76,13 @@ body {
 .high-score-name {
   font-size: 20px;
   font-weight: bold;
+  margin: auto;
+  width: 50%;
+}
+
+.you {
+  background-color: white;
+  color: black;
 }
 
 #timer {
@@ -73,25 +90,27 @@ body {
   color: white;
 }
 
-#highScores {
-  font-size: 16px;
-  background-color:#0275d8;
-  color: white;
-}
 
 #result-notification {
   display: none;
 }
 
-#high-score-header {
+.high-score-header {
   margin: auto;
   font-size: 30px;
   font-weight: bold;
   padding: 10px;
-  text-decoration: underline;
 }
 
-#high-score-footer {
+
+
+.high-score-list {
+  /* width: 50%; */
+  /* margin: auto; */
+  /* background-color: red; */
+}
+
+.high-score-footer {
   margin: auto;
   font-size: 20px;
   font-weight: bold;
@@ -110,4 +129,9 @@ body {
   font-weight: bolder;
   color: red;
   background-color: white;
+}
+
+#current-score {
+  font-size: 20px;
+  font-weight: bold;
 }

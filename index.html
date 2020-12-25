@@ -20,51 +20,54 @@
       <header id="card-header" class="card-header h3 bg-secondary">
         <div class="row">
           <div class="col-sm-3">
-            <button id="highScores" class="align-middle">High Scores</button>
+            <button id="highScores" class="btn btn-primary border">High Scores</button>
           </div>
           <div class="col-sm-6">
             <div id="title" class="align-middle">Coding Bootcamp Quiz</div>
           </div>
           <div class="col-sm-3">
-            <span id="timer" class="align-middle">60</span>
+            <span id="timer" class="align-middle"></span>
           </div>
         </div>
       </header>
+
       <section class="card-body">
         <h5 class="card-title"></h5>
         <div class="start-container">
-          <p class="card-text">This is a fast-paced, multiple choice coding quiz. The quicker you finish, the more points you receive. Click BEGIN to get started!</p>
-          <a href="#" class="btn btn-primary mt-3 startBtn">Begin!</a>
+          <p class="card-text" id="intro">This is a fast-paced, multiple choice coding quiz. The quicker you finish, the more points you receive. Keep trying to beat your high score. When you have mastered your skills, try beating Chuck Norris!</p>
+          <a href="#" class="btn btn-primary border mt-3 startBtn">Begin!</a>
         </div>
         <div class="quiz-container">
           <div id="question-container"></div>
           <div id="answer-container"></div>
         </div>
       </section>
-      <div id="modal">
-        <div id="modal-content">
-          <div class="row">
-            <div class="col-1"></div>
-            <div class="col-10" id="high-score-header">High Scores</div>
-            <div class="col-1">
-              <span id="close">&times;</span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12" id="high-score-list"></div>
-          </div>
-          <div class="row">
-            <div class="col-12" id="high-score-footer">
-              <button>Reset All</button>
-            </div>
-          </div>
-          
-        </div>
-      </div>
+      
       <footer id="card-footer" class="card-footer bg-secondary">
-        <div id="current-score-container">Score: <span id="current-score"><b></b></span></div>
+        <div id="current-score-container"><span id="current-score"><b></b></span></div>
         <div id="result-notification"></div>
       </footer>
+
+      <div class="modal">
+        <div class="modal-content">
+          <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10 high-score-header">High Scores</div>
+            <div class="col-1">
+              <span class="close">&times;</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 high-score-list"></div>
+          </div>
+          <div class="row">
+            <div class="col-12 high-score-footer">
+              <button class="btn btn-primary border" id="reset">Reset All</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </div>
   </main>
 
