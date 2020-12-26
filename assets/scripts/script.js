@@ -295,8 +295,10 @@ function submitName (event){
         return (b.score - a.score);
       })
       skip = true;
+      item.you = true;
     } else if (item.name === name && currentScore <= item.score) {
       skip = true;
+      item.you = true;
     }
   })
 
