@@ -93,7 +93,7 @@ for (var i = 0; i < questionList.length; i++){
 //Create audio elements
 var song = document.createElement("audio");
 song.setAttribute("src", "assets/audio/finalCountdown.mp3");
-song.volume = .1;
+song.volume = .2;
 
 var goodLuck = document.createElement("audio");
 goodLuck.setAttribute("src", "assets/audio/goodLuck.mp3")
@@ -161,6 +161,7 @@ function startQuiz() {
   goodLuck.onended = function() {
     youllNeedIt.play();
     youllNeedIt.onended = function() {
+      song.load();
       song.play();
     }
   }
