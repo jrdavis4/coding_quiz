@@ -10,7 +10,7 @@ The goal of this project is to design a coding quiz to test Javascipt knowledge.
 
 ## PREVIEW
 
-https://jrdavis4.github.io/password_generator/
+https://jrdavis4.github.io/coding_quiz/
 
 ![Preview of website](assets/images/screenshot.PNG)
 
