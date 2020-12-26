@@ -11,16 +11,18 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
   <link rel="stylesheet" href="assets/styles/style.css">
 
+  <script src="https://kit.fontawesome.com/83b124ea0f.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
   
-  <main class="container col-10 mt-5">
+  <main class="container col-sm-10 mt-5">
     <div class="card text-center bg-dark text-light">
       <header id="card-header" class="card-header h3 bg-secondary">
         <div class="row">
           <div class="col-sm-3">
-            <button id="highScores" class="btn btn-primary border">High Scores</button>
+            <button id="high-score-button" class="btn btn-primary border">High Scores</button>
           </div>
           <div class="col-sm-6">
             <div id="title" class="align-middle">Coding Bootcamp Quiz</div>
@@ -34,8 +36,8 @@
       <section class="card-body">
         <h5 class="card-title"></h5>
         <div class="start-container">
-          <p class="card-text" id="intro">This is a fast-paced, multiple choice coding quiz. The quicker you finish, the more points you receive. Keep trying to beat your high score. When you have mastered your skills, try beating Chuck Norris!</p>
-          <a href="#" class="btn btn-primary border mt-3 startBtn">Begin!</a>
+          <p class="card-text" id="intro">This is a fast-paced, multiple choice coding quiz. The quicker you finish, the more bonus points you receive. Keep trying to beat your high score. When you have mastered your skills, try beating Chuck Norris!</p>
+          <a href="#" class="btn btn-primary border mt-3" id="start-button">Begin!</a>
         </div>
         <div class="quiz-container">
           <div id="question-container"></div>
@@ -49,12 +51,12 @@
       </footer>
 
       <div class="modal">
-        <div class="modal-content">
+        <div class="container modal-content">
           <div class="row">
-            <div class="col-1"></div>
-            <div class="col-10 high-score-header">High Scores</div>
-            <div class="col-1">
-              <span class="close">&times;</span>
+            <div class="col-2 test"></div>
+            <div class="col-8 high-score-header">High Scores</div>
+            <div class="col-2">
+              <i class="fas fa-times" id="close-button"></i>
             </div>
           </div>
           <div class="row">
@@ -62,7 +64,7 @@
           </div>
           <div class="row">
             <div class="col-12 high-score-footer">
-              <button class="btn btn-primary border" id="reset">Reset All</button>
+              <button class="btn btn-primary border" id="reset-button">Reset All</button>
             </div>
           </div>
         </div>
@@ -70,13 +72,10 @@
       
     </div>
   </main>
-
-
 </body>
 
 <!-- scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <script src="assets/scripts/script.js"></script>
-
 
 </html>

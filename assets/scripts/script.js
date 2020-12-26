@@ -1,21 +1,17 @@
 //Assignments
-var startBtnEl = document.querySelector(".startBtn");
 var questionContainerEl = document.querySelector("#question-container");
 var answerContainerEl = document.querySelector("#answer-container");
-var cardTextEl = document.querySelector(".card-text");
 var modal = document.querySelector(".modal");
-var modalContentEl = document.querySelector(".modal-content");
 var startContainerEl = document.querySelector(".start-container");
-var modalBtn = document.querySelector("#highScores");
-var modalSpan = document.querySelector(".close");
+var modalClose = document.querySelector(".close");
 var timerEl = document.querySelector("#timer");
 var resultNotificationEl = document.querySelector("#result-notification");
 var currentScoreContainerEl = document.querySelector("#current-score-container");
 var currentScoreSpan = document.querySelector("#current-score");
 var highScoreListEl = document.querySelector(".high-score-list");
-var end = false;
 var currentScore = 0;
 var secondsLeft = 60;
+var end = false;
 var highScores = [
   {name: "Chuck Norris", score: 175, you: false},
   {name: "Sheldon Cooper", score: 156, you: false},
@@ -24,7 +20,6 @@ var highScores = [
   {name: "A Chicken", score: 57, you: false},
   {name: "Bob", score: 45, you: false},
 ]
-
 var questionList = [
   {
     question: "Which character is used for variable assignment?",
@@ -112,9 +107,9 @@ var tenSeconds = document.createElement("audio");
 tenSeconds.setAttribute("src", "assets/audio/tenSeconds.mp3");
 tenSeconds.volume = .3;
 
-var totalCarnage = document.createElement("audio");
-totalCarnage.setAttribute("src", "assets/audio/totalCarnage.mp3");
-totalCarnage.volume = .3;
+var cheer = document.createElement("audio");
+cheer.setAttribute("src", "assets/audio/cheer.mp3");
+cheer.volume = .3;
 
 var woo = document.createElement("audio");
 woo.setAttribute("src", "assets/audio/woo.mp3");
@@ -156,27 +151,24 @@ function init(){
   currentScoreSpan.textContent = "Your personal best: " + record;
 }
 
-function replay(event) {
+function startQuiz() {
+  startContainerEl.style.display = "none";
+  clearQuiz();
+  // cardTextEl.style.display = "none";
+  // startBtnEl.style.display = "none";
 
-  if (event.target.matches("button")) {
-    //Reset queue
-    for (var i = 0; i < questionList.length; i++){
-      queue.push(i);
+  goodLuck.play();
+  goodLuck.onended = function() {
+    youllNeedIt.play();
+    youllNeedIt.onended = function() {
+      song.play();
     }
-
-    //Reset variables
-    currentScore = 0;
-    secondsLeft = 60;
-    end = false;
-
-    clearQuiz();
-    startContainerEl.style.display = "block";
-    init();
-    
   }
+  setTime();
+  nextQuestion();
 }
-function nextQuestion(){
 
+function nextQuestion(){
   clearQuiz();
 
   //Get random question and remove it from queue
@@ -208,101 +200,42 @@ function nextQuestion(){
   }
   //Display current score at bottom
   currentScoreSpan.textContent = "Score: " + currentScore;
-
 }
-
-
-function clearQuiz(){
-  //Clear quiz area
-  while (questionContainerEl.lastElementChild){
-    questionContainerEl.removeChild(questionContainerEl.lastElementChild);
-  }
-  while (answerContainerEl.lastElementChild){
-    answerContainerEl.removeChild(answerContainerEl.lastElementChild);
-  }
-}
-
 
 function answerCheck(event) {
-  if (event.target.matches("button")){
-
-    //If correct answer chosen
-    if (event.target.getAttribute("data-correct") === "true"){
-      currentScore += 10;
-      var randSound = Math.floor(Math.random() * correctSounds.length);
-      correctSounds[randSound].play();
-      resultNotification(true);
-      // if incorrect answer chosen
-    } else {
-      var randSound = Math.floor(Math.random() * incorrectSounds.length);
-      incorrectSounds[randSound].play();
-      if (secondsLeft <= 5) {
-        secondsLeft = 0;
-        end = true;
-      } else {
-        secondsLeft -= 5;
-      }
-      timerEl.textContent = secondsLeft;
-      flickerTimer();
-
-      resultNotification(false);
-    }
-    
-    if (queue.length === 0){
-      end = true;
-    }
-    if (!end) {
-      nextQuestion();
-    }
-    if (end) {
-      endQuiz();
-    }
-  }
-}
-
-function flickerTimer() {
-  timerEl.style.backgroundColor = "red";
-  setTimeout(function() {
-    timerEl.style.backgroundColor = "";
-  }, 500)
-}
-
-function resultNotification(result) {
-  currentScoreContainerEl.style.display = "none";
-  resultNotificationEl.style.display = "block";
-
-  if (result) {
-    resultNotificationEl.textContent = "CORRECT!";
-    resultNotificationEl.setAttribute("class", "correct");
+  //If correct answer chosen
+  if (event.target.getAttribute("data-correct") === "true"){
+    currentScore += 10;
+    var randSound = Math.floor(Math.random() * correctSounds.length);
+    correctSounds[randSound].play();
+    resultNotification(true);
+    // if incorrect answer chosen
   } else {
-    resultNotificationEl.textContent = "WRONG!"
-    resultNotificationEl.setAttribute("class", "wrong");
-  }
-  setTimeout(function() {
-    timerEl.style.backgroundColor = "";
-    currentScoreContainerEl.style.display = "block";
-    resultNotificationEl.style.display = "none";
-  }, 1000)
-}
-
-function startQuiz() {
-
-  startContainerEl.style.display = "none";
-  clearQuiz();
-  // cardTextEl.style.display = "none";
-  // startBtnEl.style.display = "none";
-
-  goodLuck.play();
-  goodLuck.onended = function() {
-    youllNeedIt.play();
-    youllNeedIt.onended = function() {
-      song.play();
+    var randSound = Math.floor(Math.random() * incorrectSounds.length);
+    incorrectSounds[randSound].play();
+    if (secondsLeft <= 5) {
+      secondsLeft = 0;
+      end = true;
+    } else {
+      secondsLeft -= 5;
     }
-  }
-  setTime();
-  nextQuestion();
-}
+    timerEl.textContent = secondsLeft;
+    flickerTimer();
 
+    resultNotification(false);
+  }
+  
+  if (queue.length === 0){
+    end = true;
+  }
+  if (!end) {
+    nextQuestion();
+  }
+  if (end) {
+    endQuiz();
+  }
+  
+}
 
 function endQuiz() {
   //Bonus points for time remaining
@@ -317,14 +250,18 @@ function endQuiz() {
 
   //Stop song
   song.pause();
-  totalCarnage.play();
+  cheer.play();
 
   clearQuiz();
 
   //Show score
   var score = document.createElement("h1");
-  score.textContent = "Final Score: " + currentScore;
+  var span = document.createElement("span");
+  score.textContent = "Final Score: ";
+  span.textContent = currentScore;
+  span.setAttribute("id", "final-score");
   questionContainerEl.appendChild(score);
+  score.appendChild(span);
 
   //Get initials for high score
   var label = document.createElement("h4");
@@ -343,7 +280,6 @@ function endQuiz() {
 
   currentScoreSpan.textContent = "";
 }
-
 
 function submitName (event){
   event.preventDefault();
@@ -381,6 +317,12 @@ function submitName (event){
   clearQuiz();
 
   //Display scores and replay button
+
+  var high = document.createElement("h3");
+  high.textContent = "High Scores";
+  high.setAttribute("class", "high-score-header");
+  questionContainerEl.appendChild(high);
+
   highScores.forEach(function(item, i) {
     var p = document.createElement("p")
     p.setAttribute("class", "high-score-name");
@@ -399,13 +341,10 @@ function submitName (event){
 
   var replay = document.createElement("button");
   replay.setAttribute("class", "btn btn-primary border");
-  replay.setAttribute("id", "play-again");
+  replay.setAttribute("id", "replay-button");
   replay.textContent = "Play Again";
   questionContainerEl.appendChild(replay);
-
-  
 }
-
 
 function updateHighScores() {
   //Clear current scores by removing all elements
@@ -429,6 +368,56 @@ function updateHighScores() {
   localStorage.setItem("highScores", JSON.stringify(highScores));
 }
 
+function replay(event) {
+  //Reset queue
+  for (var i = 0; i < questionList.length; i++){
+    queue.push(i);
+  }
+
+  //Reset variables
+  currentScore = 0;
+  secondsLeft = 60;
+  end = false;
+
+  clearQuiz();
+  startContainerEl.style.display = "block";
+  init();
+}
+
+function clearQuiz(){
+  //Clear quiz area
+  while (questionContainerEl.lastElementChild){
+    questionContainerEl.removeChild(questionContainerEl.lastElementChild);
+  }
+  while (answerContainerEl.lastElementChild){
+    answerContainerEl.removeChild(answerContainerEl.lastElementChild);
+  }
+}
+
+function flickerTimer() {
+  timerEl.style.backgroundColor = "red";
+  setTimeout(function() {
+    timerEl.style.backgroundColor = "";
+  }, 500)
+}
+
+function resultNotification(result) {
+  currentScoreContainerEl.style.display = "none";
+  resultNotificationEl.style.display = "block";
+
+  if (result) {
+    resultNotificationEl.textContent = "CORRECT!";
+    resultNotificationEl.setAttribute("class", "correct");
+  } else {
+    resultNotificationEl.textContent = "WRONG!"
+    resultNotificationEl.setAttribute("class", "wrong");
+  }
+  setTimeout(function() {
+    timerEl.style.backgroundColor = "";
+    currentScoreContainerEl.style.display = "block";
+    resultNotificationEl.style.display = "none";
+  }, 1000)
+}
 
 function setTime() {
   var warning = false;
@@ -455,50 +444,42 @@ function setTime() {
 }
 
 function resetScores(event) {
-  if (event.target.getAttribute("id") === "reset") {
+  highScores = [
+    {name: "Chuck Norris", score: 175, you: false},
+    {name: "Sheldon Cooper", score: 156, you: false},
+    {name: "Albert Einstein", score: 150, you: false},
+    {name: "Taylor Swift", score: 120, you: false},
+    {name: "A Chicken", score: 57, you: false},
+    {name: "Bob", score: 45, you: false},
+  ]
 
-    highScores = [
-      {name: "Chuck Norris", score: 175, you: false},
-      {name: "Sheldon Cooper", score: 156, you: false},
-      {name: "Albert Einstein", score: 150, you: false},
-      {name: "Taylor Swift", score: 120, you: false},
-      {name: "A Chicken", score: 57, you: false},
-      {name: "Bob", score: 45, you: false},
-    ]
-  
-    currentScoreSpan.textContent = "Your personal best: None";
-  
-    updateHighScores();
-  }
+  currentScoreSpan.textContent = "Your personal best: None";
+
+  updateHighScores();
 }
-
 
 //Event listeners
-answerContainerEl.addEventListener("click", answerCheck)
-
-startBtnEl.addEventListener("click", startQuiz);
+window.addEventListener("click", function(event) {
+  var target = event.target.id;
+  
+  if (target === "start-button") {
+    startQuiz();
+  } else if (target === "reset-button") {
+    resetScores();
+  } else if (target === "replay-button") {
+    replay();
+  } else if (target === "close-button") {
+    modal.style.display = "none";
+  } else if (target === "high-score-button") {
+    modal.style.display = "block";
+  } else if (event.target === modal) {
+    modal.style.display = "none";
+  } else if (event.target.parentElement === answerContainerEl) {
+    answerCheck(event);
+  }
+})
 
 questionContainerEl.addEventListener("submit", submitName);
-
-questionContainerEl.addEventListener("click", replay);
-
-modal.addEventListener("click", resetScores);
-
-
-
-modalBtn.onclick = function() {
-  modal.style.display = "block";
-}
-
-modalSpan.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
 
 
 init();

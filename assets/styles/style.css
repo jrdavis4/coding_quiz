@@ -1,3 +1,5 @@
+/* MAIN CONTENT */
+
 * {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -10,6 +12,9 @@ body {
   background-attachment: fixed;
 }
 
+
+/* START PAGE */
+
 #title {
   font-weight: bold;
   margin-top: 5px;
@@ -19,6 +24,10 @@ body {
   width: 60%;
   margin: auto;
 }
+
+
+/* QUIZ PAGES */
+
 .answerBtn {
   margin: 10px auto 0px auto;
   display: block;
@@ -26,9 +35,48 @@ body {
   color: white;
 }
 
-#play-again {
+#replay-button {
   margin: 25px;
 }
+
+#timer {
+  font-weight: bolder;
+  color: white;
+}
+
+#result-notification {
+  display: none;
+}
+
+#current-score {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.correct {
+  font-size: 30px;
+  font-weight: bolder;
+  color: green;
+  background-color: white;
+}
+
+.wrong {
+  font-size: 30px;
+  font-weight: bolder;
+  color: red;
+  background-color: white;
+}
+
+
+/* FINAL SCORE PAGE */
+
+#final-score {
+  color: rgb(0, 189, 0);
+  font-weight: bold;
+}
+
+
+/* MODAL */
 
 .modal {
   display: none;
@@ -47,25 +95,28 @@ body {
   background-color: #212529;
   color: white;
   width: 80%;
-  margin: auto;
+  /* margin: auto; */
 }
 
-#reset {
-  margin-top: 15px;
-}
-
-.close {
-  color: #aaaaaa;
+#close-button {
+  float: right;
   font-size: 30px;
-  font-weight: bold;
+  margin-top: 5px;
 }
 
-.close:hover,
-.close:focus {
-  color: white;
+#close-button:hover,
+#close-button:focus {
+  color: #aaa;
   text-decoration: none;
   cursor: pointer;
 }
+
+#reset-button {
+  margin-top: 15px;
+}
+
+
+/* HIGH SCORE LIST */
 
 .score {
   color: rgb(0, 189, 0);
@@ -77,22 +128,12 @@ body {
   font-size: 20px;
   font-weight: bold;
   margin: auto;
-  width: 50%;
+  width: 80%;
 }
 
 .you {
   background-color: white;
   color: black;
-}
-
-#timer {
-  font-weight: bolder;
-  color: white;
-}
-
-
-#result-notification {
-  display: none;
 }
 
 .high-score-header {
@@ -102,36 +143,9 @@ body {
   padding: 10px;
 }
 
-
-
-.high-score-list {
-  /* width: 50%; */
-  /* margin: auto; */
-  /* background-color: red; */
-}
-
 .high-score-footer {
   margin: auto;
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
-}
-
-.correct {
-  font-size: 30px;
-  font-weight: bolder;
-  color: green;
-  background-color: white;
-}
-
-.wrong {
-  font-size: 30px;
-  font-weight: bolder;
-  color: red;
-  background-color: white;
-}
-
-#current-score {
-  font-size: 20px;
-  font-weight: bold;
 }
